@@ -3,7 +3,7 @@ OS=$(uname -s)
 export PATH=$PATH
 
 # Git prompt setup
-function gitSetup {
+function git_setup {
     # Git Auto-completion
     if [ -f ~/.git-completion.bash ]; then
         . ~/.git-completion.bash
@@ -42,7 +42,7 @@ if [ $OS == "darwin" ]; then
     fi
     # Git config
     if [ -f /usr/local/bin/git ]; then
-        gitSetup
+        git_setup
     fi
 
 # Linux config
@@ -65,7 +65,7 @@ elif [ $OS == "Linux" ]; then
         unset color_prompt force_color_prompt
         # Git config
         if [ -f /usr/bin/git ]; then
-            gitSetup
+            git_setup
         fi
 
         # set a fancy prompt (non-color, unless we know we "want" color)
