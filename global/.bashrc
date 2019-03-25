@@ -20,9 +20,9 @@ function gitSetup {
     if [ $OS == "darwin" ]; then
         export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
     elif [ $OS == "Linux" ]; then
-        if [ sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' == "ubuntu" ]; then
+        if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "ubuntu" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
-        elif [ sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' == "centos" ]; then
+        elif [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "]$ "'
         fi
     fi
@@ -44,15 +44,28 @@ if [ $OS == "darwin" ]; then
     if [ -f /usr/local/bin/git ]; then
         gitSetup
     fi
+
 # Linux config
 elif [ $OS == "Linux" ]; then
     # Ubuntu config
-    if [ sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' == "ubuntu" ]; then
+    if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "ubuntu" ]; then
         # ubuntu bashrc
         
         # set variable identifying the chroot you work in (used in the prompt below)
         if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
             debian_chroot=$(cat /etc/debian_chroot)
+        fi
+        
+        # Prompt setup
+        if [ "$color_prompt" = yes ]; then
+            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]'
+        else
+            PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\'
+        fi
+        unset color_prompt force_color_prompt
+        # Git config
+        if [ -f /usr/bin/git ]; then
+            gitSetup
         fi
 
         # set a fancy prompt (non-color, unless we know we "want" color)
@@ -62,9 +75,10 @@ elif [ $OS == "Linux" ]; then
 
     fi
 fi
-  #  if [ sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' == "centos" ]; then
+#  if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
  #       # centos bashrc
 #fi
+
 # Alias definitions
 # Put aliases into separate file instead of adding them here directly
 # use a file like ~/.bash_aliases
