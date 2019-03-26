@@ -1,4 +1,4 @@
-# Umayr Saghir's bashrc
+# Umayr Saghir's (Nightmayr) bashrc
 
 # Environment Variables
 OS=$(uname -s)
@@ -31,6 +31,13 @@ function git_setup {
     fi
 
 }
+
+# global config
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
 
 # macOS bash config
 if [ $OS == "Darwin" ]; then
