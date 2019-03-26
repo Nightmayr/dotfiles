@@ -1,6 +1,9 @@
-# Variables
+# Umayr Saghir's bashrc
+
+# Environment Variables
 OS=$(uname -s)
 export PATH=$PATH
+EDITOR=vim
 
 # Git prompt setup
 function git_setup {
@@ -17,7 +20,7 @@ function git_setup {
     export GIT_PS1_SHOWSTASHSTATE=true
     export PREPROMPT=$PS1
     # Modify prompt to show git branch
-    if [ $OS == "darwin" ]; then
+    if [ $OS == "Darwin" ]; then
         export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
     elif [ $OS == "Linux" ]; then
         if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "ubuntu" ]; then
@@ -30,7 +33,7 @@ function git_setup {
 }
 
 # macOS bash config
-if [ $OS == "darwin" ]; then
+if [ $OS == "Darwin" ]; then
     # Bash settings
     export PS1="\[\e[92m\]\u\[\e[m\]\[\e[92m\]@\[\e[m\]\[\e[92m\]\h\[\e[m\]:\[\e[36m\]\W\[\e[m\]"
     export CLICOLOR=1
@@ -73,11 +76,18 @@ elif [ $OS == "Linux" ]; then
             xterm-color|*-256color) color_prompt=yes;;
         esac
 
+    elif [ $(sed - '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
+        # Prompt override
+        PS1='[\u@\h \W'
+        
+        if [ -x "$(command -v git)" ]; then
+            # source git-prompt
+            source /usr/share/git-core/contrib/completion/git-prompt.sh
+            # git setup
+            git_setup
+        fi
     fi
 fi
-#  if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
- #       # centos bashrc
-#fi
 
 # Alias definitions
 # Put aliases into separate file instead of adding them here directly
