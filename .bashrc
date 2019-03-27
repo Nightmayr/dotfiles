@@ -16,8 +16,8 @@ shopt -s histappend
 ### Git prompt setup
 function git_setup {
     # Git Auto-completion
-    if [ -f ~/.git-completion.bash ]; then
-        . ~/.git-completion.bash
+    if [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+        . /usr/local/etc/bash_completion.d/git-completion.bash
     fi
 
     # Git prompt settings
@@ -93,7 +93,7 @@ elif [ $OS == "Linux" ]; then
             xterm-color|*-256color) color_prompt=yes;;
         esac
 
-    elif [ $(sed - '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
+    elif [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
         # Prompt override
         PS1='[\u@\h \W'
         
