@@ -5,6 +5,9 @@ export OS=$(uname -s)
 export PATH=$PATH
 export EDITOR=vim
 export HISTCONTROL=ignoreboth:erasedups
+if [ -f /etc/os-release ]; then
+    export DISTRO=$(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' | tr -d '"')
+fi
 
 # Options
 
@@ -31,9 +34,9 @@ function git_setup {
     if [ $OS == "Darwin" ]; then
         export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
     elif [ $OS == "Linux" ]; then
-        if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "ubuntu" ]; then
+        if [ $DISTRO == "ubuntu" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
-        elif [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
+        elif [ $DISTRO == "centos" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "]$ "'
         fi
     fi
@@ -68,7 +71,7 @@ if [ $OS == "Darwin" ]; then
 ### Linux 
 elif [ $OS == "Linux" ]; then
     # Ubuntu config
-    if [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "ubuntu" ]; then
+    if [ $DISTRO == "ubuntu" ]; then
         # ubuntu bashrc
         
         # set variable identifying the chroot you work in (used in the prompt below)
@@ -93,7 +96,7 @@ elif [ $OS == "Linux" ]; then
             xterm-color|*-256color) color_prompt=yes;;
         esac
 
-    elif [ $(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}') == "centos" ]; then
+    elif [ $DISTRO == "centos" ]; then
         # Prompt override
         PS1='[\u@\h \W'
         
