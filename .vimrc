@@ -57,6 +57,8 @@ Plug 'fatih/vim-go'
 "Commenting"
 Plug 'scrooloose/nerdcommenter'
 
+"Hashicorp plugins"
+Plug 'hashivim/vim-terraform'
 
 call plug#end()
 "All of your Plugs must be added before the following line
@@ -185,3 +187,12 @@ let g:syntastic_python_checkers = ['flake8']
 
 "Youcompleteme fix
 "let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/youcompleteme/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+
+"vim-terraform settings
+let g:terraform_align=1
+let g:terraform_fold_sections=1
+let g:terraform_fmt_on_save=1
+let g:terraform_commentstring='//%s'
+"let g:terraform_remap_spacebar=1
+
