@@ -1,5 +1,9 @@
 # Umayr Saghir's (Nightmayr) bashrc
 
+# Debugging
+# Uncomment below for debugging information
+#set -x
+
 # Environment Variables
 export OS=$(uname -s)
 export PATH=$PATH
@@ -109,6 +113,11 @@ elif [ $OS == "Linux" ]; then
     fi
 fi
 
+# PATH setup for mac
+if [ $OS == "Darwin" ]; then
+    source ~/.profile
+fi
+
 # Alias definitions
 # Put aliases into separate file instead of adding them here directly
 # use a file like ~/.bash_aliases
@@ -130,6 +139,27 @@ if [ -x "$(command -v kubectl)" ]; then
   source <(kubectl completion bash)
 fi
 
+### Terraform completion
+if [ -x "$(command -v terraform)" ]; then
+    if [ $OS == "Darwin" ]; then
+        complete -C /usr/local/Cellar/terraform/0.11.13/bin/terraform terraform
+    else
+        # Linux completion here
+        echo 'hello'
+    fi
+fi
+
+### Gcloud shell completion
+if [ -x "$(command -v gcloud)" ]; then
+    if [ $OS == "Darwin" ]; then
+        if [ -f '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc' ]; then 
+            . '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc'
+    fi
+    else
+            # Linux completion here
+            echo 'hello'
+        fi
+fi
 # Custom additions
 
 
