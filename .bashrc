@@ -40,7 +40,7 @@ function git_setup {
     elif [ $OS == "Linux" ]; then
         if [ $DISTRO == "ubuntu" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
-        elif [ $DISTRO == "centos" ]; then
+        elif [ $DISTRO == "centos" ] || [ $DISTRO == "rhel" ]; then
             export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "]$ "'
         fi
     fi
