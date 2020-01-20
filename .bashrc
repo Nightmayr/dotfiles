@@ -154,12 +154,9 @@ if [ -x "$(command -v kubectl)" ]; then
 fi
 
 ### Terraform completion
-if [ -x "$(command -v terraform)" ]; then
-    if [ $OS == "Darwin" ]; then
+if [ $OS == "Darwin" ]; then
+    if [ -x "$(command -v terraform)" ]; then
         complete -C /usr/local/Cellar/terraform/0.11.13/bin/terraform terraform
-    else
-        # Linux completion here
-        echo 'hello'
     fi
 fi
 
@@ -179,3 +176,5 @@ fi
 
 
 
+
+complete -C /home/umayr/applications/terraform terraform
