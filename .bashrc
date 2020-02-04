@@ -114,7 +114,7 @@ elif [ $OS == "Linux" ]; then
         fi
 
 
-    elif [ $DISTRO == "centos" ]; then
+    elif [ $DISTRO == "centos" ] || [ $DISTRO == "rhel" ]; then
         # Prompt override
         PS1='[\u@\h \W'
         
@@ -154,10 +154,8 @@ if [ -x "$(command -v kubectl)" ]; then
 fi
 
 ### Terraform completion
-if [ $OS == "Darwin" ]; then
-    if [ -x "$(command -v terraform)" ]; then
-        complete -C /usr/local/Cellar/terraform/0.11.13/bin/terraform terraform
-    fi
+if [ -x "$(command -v terraform)" ]; then
+        complete -C $(which terraform) terraform
 fi
 
 ### Gcloud shell completion
@@ -171,10 +169,13 @@ if [ -x "$(command -v gcloud)" ]; then
             echo 'hello'
         fi
 fi
+
+### AWS CLI completion
+if [ -x "$(command -v aws)" ]; then
+    complete -C $(which aws_completer) aws
+fi
+
 # Custom additions
 
 
 
-
-
-complete -C /home/umayr/applications/terraform terraform
