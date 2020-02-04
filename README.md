@@ -16,3 +16,4 @@ Example
 ```
 curl -L https://raw.githubusercontent.com/Nightmayr/dotfiles/master/.bashrc -o .bashrc
 ```
+
