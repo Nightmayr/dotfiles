@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#==============================================================================
+# Comment Sections
+#==============================================================================
+
+lbox() {
+    local msg="$*"
+    local width=79
+
+    # 1. Create the border line
+    # Starts with "#", then fills the rest of the 79 chars with "="
+    local border="#$(printf '=%.0s' $(seq 1 "$((width - 1))"))"
+
+    # 2. Output
+    echo "$border"
+    echo "# $msg"
+    echo "$border"
+}
+
+cbox() {
+    local msg="$*"
+    local width=80
+    local padding=$(( (width - ${#msg} - 4) / 2 )) # Calculate centered padding
+
+    # Print top border
+    printf "#%.0s" $(seq 1 "$width")
+    echo ""
+
+    # Print middle line with centered text
+    printf "# %${padding}s%s%${padding}s" "" "$msg" ""
+
+    # Handle odd lengths to ensure the right border aligns perfectly
+    if [ $(( (${#msg} + 4) % 2 )) -eq 1 ]; then
+        printf " #"
+    else
+        printf " #"
+    fi
+    echo ""
+
+    # Print bottom border
+    printf "#%.0s" $(seq 1 "$width")
+    echo ""
+}

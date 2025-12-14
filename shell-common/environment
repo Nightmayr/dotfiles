@@ -1,0 +1,25 @@
+#!/bin/sh
+export OS=$(uname -s)
+export EDITOR="vim"
+export HISTCONTROL=ignoreboth:erasedups
+
+case "$OS" in
+  "Linux")
+    # Use awk for reliable floating-point division and integer truncation
+    RAM_GB=$(free -k | awk '/Mem:/ {print int($2/1024/1024)}')
+    CPU_CORES=$(nproc)
+    export DISTRO=$(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' | tr -d '"')
+    ;;
+  "Darwin")
+    # Use awk for reliable floating-point division and integer truncation
+    RAM_GB=$(sysctl -n hw.memsize | awk '{print int($1/1024/1024/1024)}')
+    CPU_CORES=$(sysctl -n hw.ncpu)
+    ;;
+  *)
+    echo "Unsupported OS: $OS" >&2
+    exit 1
+    ;;
+esac
+
+export SNAPCRAFT_BUILD_ENVIRONMENT_CPU=$((CPU_CORES/2))
+export SNAPCRAFT_BUILD_ENVIRONMENT_MEMORY="$((RAM_GB/2))G"

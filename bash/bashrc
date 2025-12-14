@@ -4,13 +4,9 @@
 # Uncomment below for debugging information
 #set -x
 
-# Environment Variables
-export OS=$(uname -s)
-export PATH=$PATH
-export EDITOR=vim
-export HISTCONTROL=ignoreboth:erasedups
-if [ -f /etc/os-release ]; then
-    export DISTRO=$(sed -n '/\bID\b/p' /etc/os-release | awk -F= '/^ID/{print $2}' | tr -d '"')
+# Environment variables
+if [ -f ~/.dotfiles/environment ]; then
+    . ~/.dotfiles/environment
 fi
 
 # Options
@@ -49,14 +45,14 @@ function git_setup {
 
 # Global and OS specific configurations
 
-### Global 
+### Global
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-### macOS 
+### macOS
 if [ $OS == "Darwin" ]; then
     # Bash settings
     export PS1="\[\e[92m\]\u\[\e[m\]\[\e[92m\]@\[\e[m\]\[\e[92m\]\h\[\e[m\]:\[\e[36m\]\W\[\e[m\]"
@@ -72,17 +68,17 @@ if [ $OS == "Darwin" ]; then
         git_setup
     fi
 
-### Linux 
+### Linux
 elif [ $OS == "Linux" ]; then
     # Ubuntu config
     if [ $DISTRO == "ubuntu" ]; then
         # ubuntu bashrc
-        
+
         # set variable identifying the chroot you work in (used in the prompt below)
         if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
             debian_chroot=$(cat /etc/debian_chroot)
         fi
-        
+
         # set a fancy prompt (non-color, unless we know we "want" color)
         case "$TERM" in
             xterm-color|*-256color) color_prompt=yes;;
@@ -95,7 +91,7 @@ elif [ $OS == "Linux" ]; then
             PS1='${debian_chroot:+($debian_chroot)}\u@\h:\W'
         fi
         unset color_prompt force_color_prompt
-        
+
         # enable color support of ls and also add handy aliases
         if [ -x /usr/bin/dircolors ]; then
             test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -117,7 +113,7 @@ elif [ $OS == "Linux" ]; then
     elif [ $DISTRO == "centos" ] || [ $DISTRO == "rhel" ]; then
         # Prompt override
         PS1='[\u@\h \W'
-        
+
         if [ -x "$(command -v git)" ]; then
             # source git-prompt
             source /usr/share/git-core/contrib/completion/git-prompt.sh
@@ -135,8 +131,8 @@ fi
 # Alias definitions
 # Put aliases into separate file instead of adding them here directly
 # use a file like ~/.bash_aliases
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.bash/bash_aliases ]; then
+    . ~/.bash/bash_aliases
 fi
 
 # Completions
@@ -161,7 +157,7 @@ fi
 ### Gcloud shell completion
 if [ -x "$(command -v gcloud)" ]; then
     if [ $OS == "Darwin" ]; then
-        if [ -f '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc' ]; then 
+        if [ -f '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc' ]; then
             . '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc'
     fi
     else
@@ -176,6 +172,3 @@ if [ -x "$(command -v aws)" ]; then
 fi
 
 # Custom additions
-
-
-
