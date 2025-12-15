@@ -6,6 +6,18 @@ alias ...='cd ../../../'
 alias ....='cd ../../../../'
 alias df='df -h -x squashfs -x tmpfs -x devtmpfs'
 
+# Platform differences
+if [[ $(uname -s) == 'Darwin' ]]; then
+    # macOS
+    alias ls='ls -G'
+    export CLICOLOR=1
+else
+    # Linux
+    alias ls='ls --color=auto'
+    # list IOMMU groups in an organised way
+    alias ls-iommu='for d in /sys/kernel/iommu_groups/*/devices/*; do n=${d#*/iommu_groups/*}; n=${n%%/*}; printf "IOMMU Group %s " "$n"; lspci -nns "${d##*/}"; done;'
+fi
+# Common Aliases
 alias ll='ls -lah'           # List all files, human readable sizes
 alias la='ls -a'             # List all files
 alias grep='grep --color=auto'
@@ -23,9 +35,6 @@ alias cpu10='ps auxf | sort -nr -k 3 | head -10'
 ## List largest directories (aka "ducks")
 alias dir5='du -cksh * | sort -hr | head -n 5'
 alias dir10='du -cksh * | sort -hr | head -n 10'
-
-# list IOMMU groups in an organised way
-alias ls-iommu='for d in /sys/kernel/iommu_groups/*/devices/*; do n=${d#*/iommu_groups/*}; n=${n%%/*}; printf "IOMMU Group %s " "$n"; lspci -nns "${d##*/}"; done;'
 
 alias publicip='curl ifconfig.me; echo'
 alias reboot='shutdown -r now'

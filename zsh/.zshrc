@@ -2,7 +2,20 @@
 # 1. ENVIRONMENT & COLORS
 # ==============================================================================
 
-source "$HOME/.dotfiles/.environment"
+DOTFILES_DIR="$HOME/.dotfiles"
+declare -a SOURCE_FILES=(
+    "env"
+    "aliases"
+    "functions"
+)
+
+for file in "${SOURCE_FILES[@]}"; do
+    FILE_PATH="$DOTFILES_DIR/.$file"
+    if [[ -x "$FILE_PATH" ]]; then
+        source "$FILE_PATH"
+    fi
+done
+
 
 # Enable color support
 autoload -U colors && colors
@@ -67,44 +80,7 @@ setopt prompt_subst
 PROMPT='%F{green}%n%f@%F{magenta}%m%f %F{cyan}%1~%f${vcs_info_msg_0_} %# '
 
 # ==============================================================================
-# 5. CROSS-PLATFORM ALIASES
-# ==============================================================================
-# Detect OS to handle 'ls' colors (BSD vs GNU)
-if [[ $(uname -s) == 'Darwin' ]]; then
-    # macOS
-    alias ls='ls -G'
-    export CLICOLOR=1
-else
-    # Linux
-    alias ls='ls --color=auto'
-fi
-
-# Common Aliases
-alias ll='ls -lah'           # List all files, human readable sizes
-alias la='ls -a'             # List all files
-alias grep='grep --color=auto'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias c='clear'
-alias h='history'
-
-# ==============================================================================
-# 6. PATH CONFIGURATION
+# 5. PATH CONFIGURATION
 # ==============================================================================
 # Add local binaries and Homebrew (Mac Silicon) to path if they exist
 export PATH="$HOME/.local/bin:/opt/homebrew/bin:$PATH"
-
-
-lbox() {
-    local msg="$*"
-    local width=79
-
-    # 1. Create the border line
-    # Starts with "#", then fills the rest of the 79 chars with "="
-    local border="#$(printf '=%.0s' $(seq 1 "$((width - 1))"))"
-
-    # 2. Output
-    echo "$border"
-    echo "# $msg"
-    echo "$border"
-}

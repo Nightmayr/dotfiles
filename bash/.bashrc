@@ -5,8 +5,8 @@
 #set -x
 
 # Environment variables
-if [ -f ~/.dotfiles/environment ]; then
-    . ~/.dotfiles/environment
+if [ -f ~/.dotfiles/.env ]; then
+    . ~/.dotfiles/.env
 fi
 
 # Options
@@ -131,8 +131,8 @@ fi
 # Alias definitions
 # Put aliases into separate file instead of adding them here directly
 # use a file like ~/.bash_aliases
-if [ -f ~/.bash/bash_aliases ]; then
-    . ~/.bash/bash_aliases
+if [ -f ~/.dotfiles/.aliases ]; then
+    . ~/.dotfiles/.aliases
 fi
 
 # Completions
