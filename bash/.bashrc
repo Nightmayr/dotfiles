@@ -165,25 +165,37 @@ if [ -x "$(command -v kubectl)" ]; then
 fi
 
 ### Terraform completion
-if [ -x "$(command -v terraform)" ]; then
-        complete -C $(which terraform) terraform
+if terraform_bin="$(command -v terraform)"; then
+    complete -C "$terraform_bin" terraform
 fi
+unset terraform_bin
 
 ### Gcloud shell completion
 if [ -x "$(command -v gcloud)" ]; then
     if [ $OS == "Darwin" ]; then
         if [ -f '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc' ]; then
             . '/Users/umayr/Applications/google-cloud-sdk/completion.bash.inc'
-    fi
-    else
-            # Linux completion here
-            echo 'hello'
         fi
+    else
+        # Check the common install locations (apt, snap, manual installer)
+        for gcloud_completion in \
+            /usr/lib/google-cloud-sdk/completion.bash.inc \
+            /snap/google-cloud-sdk/current/completion.bash.inc \
+            "$HOME/google-cloud-sdk/completion.bash.inc"; do
+            if [ -f "$gcloud_completion" ]; then
+                . "$gcloud_completion"
+                break
+            fi
+        done
+        unset gcloud_completion
+    fi
 fi
 
 ### AWS CLI completion
-if [ -x "$(command -v aws)" ]; then
-    complete -C $(which aws_completer) aws
+# aws_completer ships separately from aws; only wire it up if it's actually there
+if aws_completer_bin="$(command -v aws_completer)"; then
+    complete -C "$aws_completer_bin" aws
 fi
+unset aws_completer_bin
 
 # Custom additions
