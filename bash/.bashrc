@@ -16,6 +16,16 @@ shopt -s histappend
 
 # Functions
 
+### Virtualenv prompt indicator
+# venv's own activate script edits PS1 directly, but PROMPT_COMMAND below
+# rebuilds PS1 from $PREPROMPT on every redraw, which would just discard
+# that edit. Compute the indicator fresh from $VIRTUAL_ENV instead.
+function __venv_ps1 {
+    if [ -n "$VIRTUAL_ENV" ]; then
+        printf '(%s) ' "$(basename "$VIRTUAL_ENV")"
+    fi
+}
+
 ### Git prompt setup
 function git_setup {
     # Git Auto-completion
@@ -30,17 +40,22 @@ function git_setup {
     export GIT_PS1_SHOWUPSTREAM=auto
     export GIT_PS1_SHOWSTASHSTATE=true
     export PREPROMPT=$PS1
-    # Modify prompt to show git branch
+
+    # We render the venv indicator ourselves each prompt; stop venv's
+    # activate script from also editing PS1 (it would be clobbered anyway).
+    export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+    # Modify prompt to show venv + git branch
     if [ $OS == "Darwin" ]; then
-        export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
+        export PS1_SUFFIX="$ "
     elif [ $OS == "Linux" ]; then
         if [ $DISTRO == "ubuntu" ]; then
-            export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "$ "'
+            export PS1_SUFFIX="$ "
         elif [ $DISTRO == "centos" ] || [ $DISTRO == "rhel" ]; then
-            export PROMPT_COMMAND='__git_ps1 "$PREPROMPT" "]$ "'
+            export PS1_SUFFIX="]$ "
         fi
     fi
-
+    export PROMPT_COMMAND='__git_ps1 "$(__venv_ps1)$PREPROMPT" "$PS1_SUFFIX"'
 }
 
 # Global and OS specific configurations
