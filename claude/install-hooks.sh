@@ -13,6 +13,10 @@
 #      re-running this never duplicates an entry.
 #
 # Requires jq (also a runtime dependency of the hooks themselves).
+#
+# Output contract (relied on by umayr-ansible's roles/dotfiles): the final
+# line is always exactly "changed=true" or "changed=false" — callers should
+# key off that line, not the human-readable message before it.
 set -euo pipefail
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -68,6 +72,8 @@ fi
 
 if [ "$changed" -eq 1 ]; then
   echo "install-hooks: settings.json updated"
+  echo "changed=true"
 else
   echo "install-hooks: no changes needed"
+  echo "changed=false"
 fi
